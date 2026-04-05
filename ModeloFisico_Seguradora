@@ -1,0 +1,74 @@
+create type Tsituacao as enum( 'ativa', 'vencida', 'cancelada', 'suspensa' ); 
+
+create table cliente( 
+idCliente serial primary key,  
+'ativa', 'vencida', 'cancelada', 'suspensa' ); 
+nomeCompleto varchar(30) not null, 
+nomeSocial varchar(30) not null, 
+email varchar(30) not null unique, 
+cpf varchar(11) not null unique, 
+cep int not null, 
+logradouro varchar(30) not null, 
+complemento varchar(30) not null, 
+ddi int not null, 
+ddd int not null, 
+numero int not null, 
+unique (ddi, ddd, numero) 
+); 
+
+create table fabricante( 
+idFabricante serial primary key, 
+descreicaoFobricante varchar(50) not null, 
+logo varchar(50) not null, 
+pagina varchar(50) not null unique 
+); 
+
+create table modelo( 
+idModelo serial primary key, 
+descricaoModelo varchar(50) not null, 
+imagemModelo varchar(50) not null, 
+idFabricante serial not null unique, 
+foreign key (idFabricante) references fabricante(idFabricante) 
+); 
+
+create table ocorrencia( 
+idOcorrencia serial primary key, 
+dataOcorrencia date not null, 
+lugar varchar(30) not null, 
+quilometragem real not null, 
+descricao varchar(50) not null 
+); 
+
+create table automovel( 
+placa varchar(7) not null unique, 
+renavam varchar(11) not null unique, 
+primary key(placa, renavam), 
+anoModelo date not null, 
+anoFabricacao date not null, 
+fabricante serial not null unique, 
+modelo serial not null unique, 
+idCliente serial not null, 
+idOcorrencia serial not null, 
+foreign key(fabricante) references fabricante(idFabricante), 
+foreign key(modelo) references modelo(idModelo), 
+foreign key(idCliente) references cliente(idCliente), 
+foreign key(idOcorrencia) references ocorrencia(idOcorrencia) 
+); 
+
+create table apolice( 
+numeroApolice serial primary key, 
+dataInicio date not null, 
+dataFim date not null, 
+valorPremio real not null, 
+coberturaContratada varchar(30) not null, 
+franquia real not null, 
+situacaoApolice Tsituacao not null, 
+idCliente serial not null, 
+placa varchar(7) not null, 
+renavam varchar(11) not null, 
+idOcorrencia serial not null unique, 
+foreign key(idCliente) references cliente(idCliente), 
+foreign key(placa, renavam) references automovel(placa, renavam), 
+foreign key(idOcorrencia) references ocorrencia(idOcorrencia) 
+ 
+);
