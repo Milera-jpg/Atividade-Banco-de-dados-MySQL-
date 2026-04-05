@@ -1,0 +1,67 @@
+create table cidadaoUniao ( 
+cpf varchar(11), 
+primary key (cpf), 
+orgaoEmissor varchar(8) not null, 
+numeroRg varchar(15) not null unique, 
+nomeCompleto varchar(30) not null, 
+nomeSocial varchar(30) null, 
+nomeMae varchar(30) not null, 
+nomePai varchar(30) null, 
+dataNascimento date not null, 
+paginaRegistro int null, 
+dataInicio date null, 
+idUniao int null unique, 
+cpfParceiro1 varchar(11) null unique, 
+cpfParceiro2 varchar(11) null unique, 
+check (cpfParceiro1 <> cpfParceiro2) 
+); 
+
+create table cidadao( 
+cpf varchar(11), 
+primary key (cpf), 
+orgaoEmissor varchar(8) not null, 
+numeroRg varchar(15) not null unique, 
+nomeCompleto varchar(30) not null, 
+nomeSocial varchar(30) null, 
+nomeMae varchar(30) not null, 
+nomePai varchar(30) null, 
+dataNascimento date not null 
+); 
+
+create table uniao( 
+paginaRegistro int not null, 
+dataInicio date not null, 
+idUniao int not null unique, 
+primary key (idUniao), 
+cpfParceiro1 varchar(11) not null, 
+cpfParceiro2 varchar(11) not null, 
+check (cpfParceiro1 <> cpfParceiro2), 
+foreign key (cpfParceiro1) references cidadao(cpf), 
+foreign key (cpfParceiro2) references cidadao(cpf), 
+unique (cpfParceiro1, cpfParceiro2) 
+); 
+
+
+create table uniao( 
+paginaRegistro int not null, 
+dataInicio date not null, 
+idUniao int, 
+primary key (idUniao), 
+cpfParceiro1 varchar(11) not null, 
+cpfParceiro2 varchar(11) not null, 
+check (cpfParceiro1 <> cpfParceiro2) 
+); 
+
+create table cidadao( 
+cpf varchar(11), 
+primary key (cpf), 
+orgaoEmissor varchar(8) not null, 
+numeroRg varchar(15) not null unique, 
+nomeCompleto varchar(30) not null, 
+nomeSocial varchar(30) null, 
+nomeMae varchar(30) not null, 
+nomePai varchar(30) null, 
+dataNascimento date not null, 
+idUniao int not null unique, 
+foreign key (idUniao) references uniao(idUniao) 
+); 
